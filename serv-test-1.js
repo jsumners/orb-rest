@@ -36,18 +36,21 @@ httpServer = http.createServer(function (req, res) {
 
     //res.write(numOutput);
     //res.end();
+    //
+    connection.connect();
+
+    var query = connection.query('SELECT * FROM parents LIMIT 3', function (error, rows, fields) {
+      console.log(rows[1].COUNTRY);
+      res.end(rows[1].COUNTRY);
+      connection.end();
+    });
 
 });
 
-httpServer.listen(1337, "192.168.1.68");
-
-console.log('Server running at http://192.168.1.68:1337/');
-
-connection.connect();       
-
-var query = connection.query('SELECT * FROM parents LIMIT 3', function (error, rows, fields) {
-  //res.write(rows[1].COUNTRY);
-  console.log(rows[1].COUNTRY);
+httpServer.listen(1337, "192.168.1.68", (err) => {
+  if (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
+  console.log('Server running at http://192.168.1.68:1337/');
 });
-
-connection.end();
